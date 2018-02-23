@@ -1,3 +1,5 @@
+// params setting tracks all agents on 1/22/2018
+
 require('dotenv').config();
 const rp = require("request-promise");
 const _ = require('lodash');
