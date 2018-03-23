@@ -17,14 +17,22 @@ function request_livechat_agents(agent_options) {
   .auth(process.env.EMAIL, process.env.API_KEY)
   .then((res) => {
     res.forEach((agent) => {
-      // if agent part of group 1 (customer support), push to cs_agents_logins;
+      // build cs_agent_logins array if agent is part of group 1 
       if (is_cs_agent(agent.group_ids, 1) === true) {
         cs_agent_logins.push(agent.login);
       }
     })
-  })
 
-  // ~~~~~ then, when cs_agent_logins is complete, iterate through it and run request_agent_chats(chat_options) for every login
+
+
+    // !!! then, when cs_agent_logins is complete, iterate through it and run request_agent_chats(chat_options) for every login
+    console.log("Agents arr: ", cs_agent_logins);
+
+    // !!!
+
+
+
+  })
 }
 
 request_livechat_agents(agent_options);
@@ -36,7 +44,6 @@ function is_cs_agent(arr_group_numbers, cs_group_number) {
     return false;          
   }
 }
-
 
 // Then, pull report for each agent
 // Docs - https://docs.livechatinc.com/rest-api/#get-list-of-chats
@@ -86,10 +93,4 @@ function request_agent_chats(chat_options) {
     console.log("Error: ", err)
   })
 };
-
-
-
-
-
-
 
