@@ -31,17 +31,17 @@ let chat_params = {
   date_to: "2018-01-22",
   timezone: "America/Los_Angeles"
 }
-let options = {
+let chat_options = {
   uri: "https://api.livechatinc.com/v2/chats",
   json: true,
   qs: chat_params
 }
 
-livechat_request(options);
+request_agent_chats(chat_options);
 
-function livechat_request(options) {
+function request_agent_chats(chat_options) {
   chat_params.page = chat_params.page || 1;
-  rp(options)
+  rp(chat_options)
   .auth(process.env.EMAIL, process.env.API_KEY)
   .then((res) => {
     console.log("page: ", chat_params.page);
@@ -55,7 +55,7 @@ function livechat_request(options) {
       chat_params = _.merge(chat_params, {"page":(chat_params.page + 1)});
       setTimeout(next_request, 1500);
       function next_request() {
-        return livechat_request(options);
+        return request_agent_chats(chat_options);
       }
     } else {
       console.log("total_chats length: ", total_chats.length);
