@@ -1,12 +1,32 @@
-// params setting tracks all agents on 1/22/2018
-
 require('dotenv').config();
 const rp = require("request-promise");
 const _ = require('lodash');
 
+// First, retreive list of all agents in group 1
+// Docs - https://docs.livechatinc.com/rest-api/#get-list-of-chats
+
+// let agents = [];
+// let agent_options = {
+//   uri: "https://api.livechatinc.com/v2/agents",
+//   json: true
+// }
+
+// function livechat_agents(agent_options) {
+//   rp(agent_options)
+//   .auth(process.env.EMAIL, process.env.API_KEY)
+//   .then((res) => {
+//     console.log("Response: ", res);
+//   })
+// }
+
+// livechat_agents(agent_options);
+
+// Then, pull report for each agent
+// Docs - https://docs.livechatinc.com/rest-api/#get-list-of-chats
+// Example - https://api.livechatinc.com/v2/chats?date_from=2018-01-22&date_to=2018-01-22&timezone=America/Los_Angeles&page=...
 let total_chats = [];
-let model = ["id", "tickets", "visitor_name", "visitor_id", "agents", "rate", "duration", "chat_start_url", "referrer", "group", "started", "tags", "pre_chat_survey", "engagement", "ended", "prechat_survey"];
-let params = {
+let chat_model = ["id", "tickets", "visitor_name", "visitor_id", "agents", "rate", "duration", "chat_start_url", "referrer", "group", "started", "tags", "pre_chat_survey", "engagement", "ended", "prechat_survey"];
+let chat_params = {
   date_from: "2018-01-22",
   date_to: "2018-01-22",
   timezone: "America/Los_Angeles"
@@ -14,27 +34,25 @@ let params = {
 let options = {
   uri: "https://api.livechatinc.com/v2/chats",
   json: true,
-  qs: params
+  qs: chat_params
 }
-
-// https://api.livechatinc.com/v2/chats?date_from=2018-01-22&date_to=2018-01-22&timezone=America/Los_Angeles&page=...
 
 livechat_request(options);
 
 function livechat_request(options) {
-  params.page = params.page || 1;
-  console.log("page: ", params.page);
+  chat_params.page = chat_params.page || 1;
   rp(options)
   .auth(process.env.EMAIL, process.env.API_KEY)
   .then((res) => {
+    console.log("page: ", chat_params.page);
     // push to total_chats only columns that we need 
     res.chats.forEach((chat) => {
-      let filtered_chat = _.pick(chat, model);
+      let filtered_chat = _.pick(chat, chat_model);
       total_chats.push(filtered_chat);
     })
     // collect responses from page 2 - last page 
-    if (params.page < res.pages) {
-      params = _.merge(params, {"page":(params.page + 1)});
+    if (chat_params.page < res.pages) {
+      chat_params = _.merge(chat_params, {"page":(chat_params.page + 1)});
       setTimeout(next_request, 1500);
       function next_request() {
         return livechat_request(options);
