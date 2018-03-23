@@ -2,24 +2,48 @@ require('dotenv').config();
 const rp = require("request-promise");
 const _ = require('lodash');
 
-// First, retreive list of all agents in group 1
+// First, retreive list of all agents in group 1. 
 // Docs - https://docs.livechatinc.com/rest-api/#get-list-of-chats
 
-// let agents = [];
-// let agent_options = {
-//   uri: "https://api.livechatinc.com/v2/agents",
-//   json: true
-// }
+// arr of cs agent emails (called logins in livechat)
+let cs_agent_logins = [];
+let agent_options = {
+  uri: "https://api.livechatinc.com/v2/agents",
+  json: true
+}
 
-// function livechat_agents(agent_options) {
-//   rp(agent_options)
-//   .auth(process.env.EMAIL, process.env.API_KEY)
-//   .then((res) => {
-//     console.log("Response: ", res);
-//   })
-// }
+function request_livechat_agents(agent_options) {
+  rp(agent_options)
+  .auth(process.env.EMAIL, process.env.API_KEY)
+  .then((res) => {
+    res.forEach((agent) => {
+      // build cs_agent_logins array if agent is part of group 1 
+      if (is_cs_agent(agent.group_ids, 1) === true) {
+        cs_agent_logins.push(agent.login);
+      }
+    })
 
-// livechat_agents(agent_options);
+
+
+    // !!! then, when cs_agent_logins is complete, iterate through it and run request_agent_chats(chat_options) for every login
+    console.log("Agents arr: ", cs_agent_logins);
+
+    // !!!
+
+
+
+  })
+}
+
+request_livechat_agents(agent_options);
+
+function is_cs_agent(arr_group_numbers, cs_group_number) {
+  if (arr_group_numbers.includes(cs_group_number)) {
+    return true;          
+  } else {
+    return false;          
+  }
+}
 
 // Then, pull report for each agent
 // Docs - https://docs.livechatinc.com/rest-api/#get-list-of-chats
@@ -37,7 +61,7 @@ let chat_options = {
   qs: chat_params
 }
 
-request_agent_chats(chat_options);
+// request_agent_chats(chat_options);
 
 function request_agent_chats(chat_options) {
   chat_params.page = chat_params.page || 1;
@@ -69,10 +93,4 @@ function request_agent_chats(chat_options) {
     console.log("Error: ", err)
   })
 };
-
-
-
-
-
-
 
