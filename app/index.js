@@ -9,20 +9,31 @@ function request_livechat_agents() {
     uri: "https://api.livechatinc.com/v2/agents",
     json: true
   }
-  rp(options)
+  return rp(options)
   .auth(process.env.EMAIL, process.env.API_KEY)
   .then((res) => {
+    // build logins array if agent is part of group 1 
     res.forEach((agent) => {
-      // build logins array if agent is part of group 1 
       if (is_cs_agent(agent.group_ids, 1) === true) {
         logins.push(agent.login);
       }
     })
-    console.log("logins within function: ", logins);
+    return logins;
   })
 }
 
-console.log("logins outside function: ", request_livechat_agents());
+request_livechat_agents()
+.then((res) => {
+  console.log("Logins: ", res);
+
+  // FOR EACH AGENT, CALL REQUEST_AGENT_CHATS() 
+
+
+
+})
+.catch((err) => {
+  console.log("Error fetching agents: ", err);
+})
 
 function is_cs_agent(arr_group_numbers, cs_group_number) {
   if (arr_group_numbers.includes(cs_group_number)) {
