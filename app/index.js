@@ -2,40 +2,38 @@ require('dotenv').config();
 const rp = require("request-promise");
 const _ = require('lodash');
 
-// First, retreive list of all agents in group 1. 
-// Docs - https://docs.livechatinc.com/rest-api/#get-list-of-chats
-
-// arr of cs agent emails (called logins in livechat)
-let cs_agent_logins = [];
-let agent_options = {
-  uri: "https://api.livechatinc.com/v2/agents",
-  json: true
-}
-
-function request_livechat_agents(agent_options) {
-  rp(agent_options)
+// returns array of logins (cs agent emails)
+function request_livechat_agents() {
+  let logins = [];
+  let options = {
+    uri: "https://api.livechatinc.com/v2/agents",
+    json: true
+  }
+  return rp(options)
   .auth(process.env.EMAIL, process.env.API_KEY)
   .then((res) => {
+    // build logins array if agent is part of group 1 
     res.forEach((agent) => {
-      // build cs_agent_logins array if agent is part of group 1 
       if (is_cs_agent(agent.group_ids, 1) === true) {
-        cs_agent_logins.push(agent.login);
+        logins.push(agent.login);
       }
     })
-
-
-
-    // !!! then, when cs_agent_logins is complete, iterate through it and run request_agent_chats(chat_options) for every login
-    console.log("Agents arr: ", cs_agent_logins);
-
-    // !!!
-
-
-
+    return logins;
   })
 }
 
-request_livechat_agents(agent_options);
+request_livechat_agents()
+.then((res) => {
+  console.log("Logins: ", res);
+
+  // FOR EACH AGENT, CALL REQUEST_AGENT_CHATS() 
+
+
+
+})
+.catch((err) => {
+  console.log("Error fetching agents: ", err);
+})
 
 function is_cs_agent(arr_group_numbers, cs_group_number) {
   if (arr_group_numbers.includes(cs_group_number)) {
