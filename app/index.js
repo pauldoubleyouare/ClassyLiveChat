@@ -24,11 +24,11 @@ function request_livechat_agents() {
 
 request_livechat_agents()
 .then((res) => {
-  console.log("Logins: ", res);
 
   // FOR EACH AGENT, CALL REQUEST_AGENT_CHATS(agent) 
   res.forEach((agent) => {
-    // request_agent_chats(agent);
+    console.log("AGENT: ", agent);
+    // grab_agent(agent);
   })
 
 
@@ -67,10 +67,6 @@ function grab_agent(agent) {
   request_agent_chats(chat_options);
 }
 
-var agents = ['bhaas@classy.org'];
-
-grab_agent('bhaas@classy.org');
-
 function request_agent_chats(chat_options) {
   chat_options.qs.page = chat_options.qs.page || 1;
   let agent_chats = allAgents[chat_options.qs.agent];
@@ -94,7 +90,7 @@ function request_agent_chats(chat_options) {
       console.log("total_chats length: ", agent_chats.length);
       console.log("```````````");
       // print to convert to CSV
-      // console.log(JSON.stringify(agent_chats));
+      console.log(JSON.stringify(agent_chats));
       return agent_chats;
     }
   })
