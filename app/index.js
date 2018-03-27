@@ -8,7 +8,7 @@ agents.request_livechat_agents()
   // FOR EACH AGENT, CALL REQUEST_AGENT_CHATS(agent) 
   res.forEach((agent) => {
     // console.log("AGENT: ", agent);
-    // build_agent_chats(agent);
+    build_agent_chats(agent);
   })
 
 })
@@ -21,9 +21,6 @@ agents.request_livechat_agents()
 // Example - https://api.livechatinc.com/v2/chats?date_from=2018-01-22&date_to=2018-01-22&timezone=America/Los_Angeles&page=...
 let allAgentChats = {};
 let chat_model = ["id", "tickets", "visitor_name", "visitor_id", "agents", "rate", "duration", "chat_start_url", "referrer", "group", "started", "tags", "pre_chat_survey", "engagement", "ended", "prechat_survey"];
-  
-// TESTING BUILD_AGENT_CHATS()  
-build_agent_chats('bhaas@classy.org');
 
 function build_agent_chats(agent) {
   allAgentChats[agent] = [];
@@ -43,22 +40,17 @@ function build_agent_chats(agent) {
 
 function request_agent_chats(chat_options) {
   chat_options.qs.page = chat_options.qs.page || 1;
-
   // agent_chats should be set to a blank [] in build_agent_chats()
   let agent_chats = allAgentChats[chat_options.qs.agent];
-  console.log("agent chats arr length, should be 0 to start and build with each page: ", agent_chats.length);
   rp(chat_options)
   .auth(process.env.EMAIL, process.env.API_KEY)
   .then((res) => {
-
-    // TESTS - TOTAL 2 PAGES AND 35 CHATS
-    console.log("page: ", chat_options.qs.page);
     // push chats to with data/columns that we need
     res.chats.forEach((chat) => {
       let filtered_chat = _.pick(chat, chat_model);
       agent_chats.push(filtered_chat);
     })
-    // collect responses from page 2 - last page 
+    // collect responses from page 2 onward (livechat provides 25 chats per page)
     if (chat_options.qs.page < res.pages) {
       chat_options.qs = _.merge(chat_options.qs, {"page":(chat_options.qs.page + 1)});
       setTimeout(next_request, 1500);
@@ -68,9 +60,9 @@ function request_agent_chats(chat_options) {
     } else {
       console.log("Agent: ", chat_options.qs.agent);
       console.log("Total agent chats: ", agent_chats.length);
-      // print single agent chats to convert to CSV, and add that agent's chats to allAgentChats {}
-
+      // print single agent chats to convert to CSV
       console.log(JSON.stringify(agent_chats));
+      // Store that agent's chats in allAgentChats object
       // allAgentChats[agent] = agent_chats;
       // test if allAgentChats filled with agent's chats
       return agent_chats;
