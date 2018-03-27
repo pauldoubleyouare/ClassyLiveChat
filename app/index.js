@@ -25,8 +25,8 @@ let chat_model = ["id", "tickets", "visitor_name", "visitor_id", "agents", "rate
 function build_agent_chats(agent) {
   allAgentChats[agent] = [];
   let chat_params = {
-    date_from: "2018-01-22",
-    date_to: "2018-01-25",
+    date_from: "2018-02-01",
+    date_to: "2018-02-28",
     timezone: "America/Los_Angeles",
     agent: agent
   }
@@ -58,7 +58,7 @@ function request_agent_chats(chat_options) {
         return request_agent_chats(chat_options);
       }
     } else {
-      console.log("Agent: ", chat_options.qs.agent);
+      console.log("\n\n\n\n\n\nAgent: ", chat_options.qs.agent);
       console.log("Total agent chats: ", agent_chats.length);
       // print single agent chats to convert to CSV
       console.log(JSON.stringify(agent_chats));
