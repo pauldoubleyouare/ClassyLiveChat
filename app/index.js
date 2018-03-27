@@ -1,28 +1,9 @@
 require('dotenv').config();
 const rp = require("request-promise");
 const _ = require('lodash');
+const agents = require('./agents');
 
-// returns array of logins (cs agent emails)
-function request_livechat_agents() {
-  let logins = [];
-  let options = {
-    uri: "https://api.livechatinc.com/v2/agents",
-    json: true
-  }
-  return rp(options)
-  .auth(process.env.EMAIL, process.env.API_KEY)
-  .then((res) => {
-    // build logins array if agent is part of group 1 
-    res.forEach((agent) => {
-      if (is_cs_agent(agent.group_ids, 1) === true) {
-        logins.push(agent.login);
-      }
-    })
-    return logins;
-  })
-}
-
-request_livechat_agents()
+agents.request_livechat_agents()
 .then((res) => {
 
   // FOR EACH AGENT, CALL REQUEST_AGENT_CHATS(agent) 
@@ -37,13 +18,7 @@ request_livechat_agents()
   console.log("Error fetching agents: ", err);
 })
 
-function is_cs_agent(arr_group_numbers, cs_group_number) {
-  if (arr_group_numbers.includes(cs_group_number)) {
-    return true;          
-  } else {
-    return false;          
-  }
-}
+
 
 // Then, pull report for each agent
 // Docs - https://docs.livechatinc.com/rest-api/#get-list-of-chats
