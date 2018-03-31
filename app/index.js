@@ -10,7 +10,7 @@ const chats = require('./chats');
     etc
   }
 */
-var testAgents = ['bhaas@classy.org', 'stelfer@classy.org'];
+var testAgents = ['bhaas@classy.org'];
 
 testAgents.forEach(agent => {
   chats.agent_chats(agent)
