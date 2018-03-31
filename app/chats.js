@@ -13,6 +13,9 @@ function request_agent_chats(options, agent_chats_data) {
       let filtered_chat = _.pick(chat, chat_model);
       agent_chats_data.push(filtered_chat);
     })
+    
+    console.log("page: ", options.qs.page);
+    console.log("total pages: ", res.pages);
 
     // collect responses from page 2 onward (livechat provides 25 chats per page)
     if (options.qs.page < res.pages) {
@@ -22,9 +25,11 @@ function request_agent_chats(options, agent_chats_data) {
         return request_agent_chats(options);
       }
     } else {
+      console.log("get here");
       console.log("AGENT CHATS: ", agent_chats_data);
       // console.log("\n\n\nAgent: ", options.qs.agent);
       // console.log("Total chats: ", agent_chats_data.length);
+
       return Promise.resolve(agent_chats_data);
     }
   })
