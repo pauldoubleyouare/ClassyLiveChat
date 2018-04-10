@@ -3,7 +3,7 @@ const agents = require('./agents');
 const chats = require('./chats');
 
 /*
-  Iterate through arr of agents and build allAgentChats:
+  Iterate through an array of agents and build allAgentChats:
   {
     agent: [chats],
     agent: [chats],
@@ -14,13 +14,15 @@ var testAgents = ['bhaas@classy.org'];
 
 testAgents.forEach(agent => {
   chats.agent_chats(agent)
-    // response should be all of that agent's chats
+    // response should be an array of that agent's chats
     .then(res => {
-      console.log("\n\n\nAgent: ", agent);
-      console.log("Chats? ", res);
+      // print JSON for that agent
+      // console.log("\n\n\nAgent: ", agent);
+      // console.log("Chats length: ", res.length);
+      // new function to build all agents object
     })
     .catch(err => {
-      console.log("Error fetching agent: ", err);
+      console.log("Error fetching agent chats: ", err);
     })
 })
 
