@@ -13,15 +13,15 @@ const chats = require('./chats');
 var testAgents = ['bhaas@classy.org'];
 
 testAgents.forEach(agent => {
+  // fetch an array of each agent's chats
   chats.agent_chats(agent)
-    // response should be an array of that agent's chats
     .then(res => {
       // print JSON for that agent
       console.log("\n\n\n\n\nAgent: ", agent);
 
 
       // ERRORING B/C NOT ASYNC
-      console.log("Chats: ", res.length);
+      // console.log("Chats: ", res.length);
 
       
       // new function to build all agents object
@@ -31,6 +31,7 @@ testAgents.forEach(agent => {
     })
 })
 
+// ~~~ Once works for one agent, implement for all ~~~
 // let allAgentChats = {};
 // agents.request_livechat_agents()
 // .then((res) => {

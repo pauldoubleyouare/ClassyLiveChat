@@ -22,6 +22,10 @@ exports.agent_chats = function(agent) {
   // hit livechat API 
   return request_agent_chats(options, single_agent_chats_array)
   .then(res => {
+
+    // test
+    console.log("TEST: ", res.length);
+    
     // single_agent_chats_array returned from request_agent_chats
     return Promise.resolve(res);
   }) 
@@ -38,10 +42,7 @@ function request_agent_chats(options, single_agent_chats_array) {
       let filtered_chat = _.pick(chat, chat_model);
       single_agent_chats_array.push(filtered_chat);
     })
-    
     console.log("page: ", options.qs.page);
-    // console.log("total pages: ", res.pages);
-    // console.log("single_agent_chats_array length: ", single_agent_chats_array.length);
 
     // collect responses from page 2 onward (livechat provides 25 chats per page)
     if (options.qs.page < res.pages) {
@@ -51,9 +52,6 @@ function request_agent_chats(options, single_agent_chats_array) {
         return request_agent_chats(options, single_agent_chats_array);
       }
     } else {
-      // console.log("\n\n\n\n before index.js, does this print all of an agent's chats..");
-      // console.log("Agent: ", options.qs.agent);
-      // console.log("Total chats: ", single_agent_chats_array.length);
       return Promise.resolve(single_agent_chats_array);
     }
   })
