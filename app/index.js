@@ -17,8 +17,13 @@ testAgents.forEach(agent => {
     // response should be an array of that agent's chats
     .then(res => {
       // print JSON for that agent
-      // console.log("\n\n\nAgent: ", agent);
-      // console.log("Chats length: ", res.length);
+      console.log("\n\n\n\n\nAgent: ", agent);
+
+
+      // ERRORING B/C NOT ASYNC
+      console.log("Chats: ", res.length);
+
+      
       // new function to build all agents object
     })
     .catch(err => {
