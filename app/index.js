@@ -4,25 +4,24 @@ const chats = require('./chats');
 
 /*
   TO DO:
-
   1) Function that takes JSON as param and generates CSV
-
 */
 
 // fetch arr of agents
-console.log("is array or promise: ", agents.request_livechat_agents())
+agents.request_livechat_agents().then(agents => {
+  agents.forEach(agent => {
+    // fetch chats for each agent
+    chats.agent_chats(agent)
+    .then(res => {
+      console.log("\nAgent: ", agent);
+      console.log("chats length", res.length);
 
-// .forEach(agent => {
-//   // fetch chats for each agent
-//   chats.agent_chats(agent)
-//     .then(res => {
-//       console.log("\n\n\n\n\nAgent: ", agent);
-//       console.log("chats length", res.length);
+      // download CSV
 
-//       // download CSV
+    })
+    .catch(err => {
+      console.log("error fetching agent chats: ", err);
+    })
+  })
+})
 
-//     })
-//     .catch(err => {
-//       console.log("Error fetching agent chats: ", err);
-//     })
-// })

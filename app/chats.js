@@ -37,8 +37,6 @@ function request_agent_chats(options, single_agent_chats_array) {
       let filtered_chat = _.pick(chat, chat_model);
       single_agent_chats_array.push(filtered_chat);
     })
-    console.log("page: ", options.qs.page);
-
     // collect responses from page 2 onward (livechat provides 25 chats per page)
     if (options.qs.page < res.pages) {
       return new Promise(resolve => {
