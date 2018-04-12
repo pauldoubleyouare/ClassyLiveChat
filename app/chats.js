@@ -21,13 +21,12 @@ exports.agent_chats = function(agent) {
   }
   return request_agent_chats(options, single_agent_chats_array)
   .then(res => {
-    // single_agent_chats_array returned from request_agent_chats
+    // return array of all chats for a single agent
     return Promise.resolve(res);
   }) 
 }
 
 function request_agent_chats(options, single_agent_chats_array) {
-  console.log("here?");
   single_agent_chats_array = single_agent_chats_array;
   options.qs.page = options.qs.page || 1;
   return rp(options)
