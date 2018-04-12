@@ -15,9 +15,12 @@ var testAgents = ['bhaas@classy.org'];
 testAgents.forEach(agent => {
   // fetch an array of each agent's chats
   chats.agent_chats(agent)
+
+    // should run when agent_chats() complete..
     .then(res => {
       // print JSON for that agent
       console.log("\n\n\n\n\nAgent: ", agent);
+      console.log("res length: ", res.length);
 
 
       // ERRORING B/C NOT ASYNC
